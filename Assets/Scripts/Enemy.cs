@@ -27,5 +27,11 @@ public class Enemy : MonoBehaviour
         Vector3 enemyPosition = transform.position;
 
         transform.position = Vector3.MoveTowards(enemyPosition, playerPosition, speed * Time.deltaTime);
+
+        Vector2 offset = new Vector2(playerPosition.x - enemyPosition.x, playerPosition.y - enemyPosition.y);
+
+        float angle = Mathf.Atan2(offset.y, offset.x) * Mathf.Rad2Deg;
+        
+        transform.eulerAngles = new Vector3(angle, -90f, 90f);
     }
 }

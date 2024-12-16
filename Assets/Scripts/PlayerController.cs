@@ -1,41 +1,57 @@
+using System.Linq;
 using UnityEngine;
 
 
 public class PlayerController : MonoBehaviour
 {
     [Header("Components")]
+    private Rigidbody rb;
     private Camera mainCamera;
-    [SerializeField] private Transform crosshair;
+    [SerializeField] public Transform crosshair;
     [SerializeField] private Weapon weapon;
 
     [Header("Attributes")]
-    [SerializeField] private float playerSpeed = 5.0f;
-    private float verticalInput;
-    private float horizontalInput;
+    [SerializeField] private float speed = 5.0f;
+    private Vector2 moveDiagonal;
 
     
 
     void Start()
     {
+        rb = GetComponent<Rigidbody>();
         mainCamera = Camera.main;
         Cursor.visible = false;
     }
 
     void Update()
     {
+        ScreenRestraints();
+
+        Inputs();
+    }
+
+    void FixedUpdate()
+    {
         PlayerMovement();
         MouseMovement();
+    }
 
-        FireGun();
+    void Inputs()
+    {
+        float moveX = Input.GetAxisRaw("Horizontal");
+        float moveY = Input.GetAxisRaw("Vertical");
+
+        moveDiagonal = new Vector2(moveX, moveY).normalized;
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            weapon.Fire();
+        }
     }
 
     void PlayerMovement()
     {
-        verticalInput = Input.GetAxis("Vertical");
-        horizontalInput = Input.GetAxis("Horizontal");
-
-        transform.position += Vector3.up * playerSpeed * Time.deltaTime * verticalInput;
-        transform.position += Vector3.right * playerSpeed * Time.deltaTime * horizontalInput;
+        rb.linearVelocity = new Vector2(moveDiagonal.x * speed, moveDiagonal.y * speed);
     }
 
     void MouseMovement()
@@ -46,29 +62,22 @@ public class PlayerController : MonoBehaviour
         mousePoint.z = -2f;
         crosshair.position = mousePoint;
 
-        Vector3 screenPoint = mainCamera.WorldToScreenPoint(transform.localPosition);
-        screenPoint.z = -0.1f;
+        Vector3 playerPosition = mainCamera.WorldToScreenPoint(transform.localPosition);
+        playerPosition.z = -0.1f;
+        
 
-        Vector2 offset = new Vector2(mouse.x - screenPoint.x, mouse.y - screenPoint.y);
+        Vector2 offset = new Vector2(playerPosition.x - mouse.x, playerPosition.y - mouse.y);
 
         float angle = Mathf.Atan2(offset.y, offset.x) * Mathf.Rad2Deg;
         
         transform.eulerAngles = new Vector3(angle, -90f, 90f);
     }
 
-    void FireGun()
+    void ScreenRestraints()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            weapon.Fire();
-        }
+        Vector3 pos = mainCamera.WorldToViewportPoint(transform.position);
+        pos.x = Mathf.Clamp01(pos.x);
+        pos.y = Mathf.Clamp01(pos.y);
+        transform.position = mainCamera.ViewportToWorldPoint(pos);
     }
-
-    // void OnGUI()
-    // {
-    //     var mousePos = Event.current.mousePosition;
-
-    //     mousePos.x = Mathf.Clamp(mousePos.x, 100, 1002);
-    //     mousePos.y = Mathf.Clamp(mousePos.y, 100, 476);
-    // }
 }
