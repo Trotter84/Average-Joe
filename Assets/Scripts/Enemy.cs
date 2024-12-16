@@ -10,6 +10,10 @@ public class Enemy : MonoBehaviour
     [SerializeField] [Range(0.1f, 5f)] private float speed = 2.0f;
     [SerializeField] [Range(1, 10)] private int damage = 1;
 
+    private float CurrentTimer = 0;
+    private float TimeBetweenTicks = 1.5f;
+
+
     void Start()
     {
         player = GameObject.Find("Player");
@@ -34,4 +38,24 @@ public class Enemy : MonoBehaviour
         
         transform.eulerAngles = new Vector3(angle, -90f, 90f);
     }
+
+    void OnCollisionStay(Collision other)
+    {
+        if (other.transform.CompareTag("Player"))
+        {
+            CurrentTimer += Time.deltaTime;
+
+            if (CurrentTimer >= TimeBetweenTicks)
+            {
+                var health = other.transform.GetComponent<Health>();
+                if (health != null)
+                {
+                    health.TakeDamage(damage);
+                              
+                    CurrentTimer = 0;
+                }
+            }
+        }
+    }
+
 }
