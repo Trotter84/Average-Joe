@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Threading;
 using UnityEngine;
 
 
@@ -14,7 +15,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float speed = 5.0f;
     private Vector2 moveDiagonal;
 
-    
+    private float timer;
 
     void Start()
     {
@@ -28,6 +29,8 @@ public class PlayerController : MonoBehaviour
         ScreenRestraints();
 
         Inputs();
+
+        timer -= Time.deltaTime;
     }
 
     void FixedUpdate()
@@ -46,6 +49,18 @@ public class PlayerController : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             weapon.Fire();
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            if (0 > timer)
+            {
+                Debug.LogWarning(timer);
+
+                weapon.Reload();
+
+                timer = weapon.reloadTime;
+            }
         }
     }
 
