@@ -1,27 +1,34 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.Events;
 
 
 public class PlayerController : MonoBehaviour
 {
     [Header("Components")]
     private Rigidbody rb;
-    private Camera mainCamera;
-    [SerializeField] public Transform crosshair;
-    [SerializeField] private Weapon weapon;
+    [SerializeField] private Camera mainCamera;
+    [SerializeField] private MouseController mouseController;
+    [SerializeField] private Weapon weaponScript;
 
     [Header("Attributes")]
     [SerializeField] private float speed = 5.0f;
     private Vector2 moveDiagonal;
+    public List<GameObject> inventory = new List<GameObject>();
+    private int weaponChoice = 0;
 
     private float timer;
+
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+
         mainCamera = Camera.main;
-        Cursor.visible = false;
+
+        InventoryController();
     }
 
     void Update()
@@ -36,7 +43,6 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         PlayerMovement();
-        MouseMovement();
     }
 
     void Inputs()
@@ -46,22 +52,52 @@ public class PlayerController : MonoBehaviour
 
         moveDiagonal = new Vector2(moveX, moveY).normalized;
 
-        if (Input.GetMouseButtonDown(0))
-        {
-            weapon.Fire();
-        }
-
         if (Input.GetKeyDown(KeyCode.R))
         {
             if (0 > timer)
             {
-                Debug.LogWarning(timer);
+                weaponScript.Reload();
 
-                weapon.Reload();
-
-                timer = weapon.reloadTime;
+                timer = weaponScript.reloadTime;
             }
         }
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            weaponChoice = 0;
+            InventoryController();
+        }
+        
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            weaponChoice = 1;
+            InventoryController();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            weaponChoice = 2;
+            InventoryController();
+        }
+    }
+
+    void InventoryController()
+    {
+        foreach (var weapon in inventory)
+        {
+            weapon.SetActive(false);
+        }
+        
+        inventory[weaponChoice].SetActive(true);
+
+        weaponScript = GameObject.FindGameObjectWithTag("Gun").GetComponent<Weapon>();
+        if (weaponScript == null)
+        {
+            Debug.LogError("Weapon : Weapon on Player is NULL.");
+        }
+        mouseController.ChangeGun();
+        weaponScript.ChangeAudioSource();
+
     }
 
     void PlayerMovement()
@@ -69,17 +105,11 @@ public class PlayerController : MonoBehaviour
         rb.linearVelocity = new Vector2(moveDiagonal.x * speed, moveDiagonal.y * speed);
     }
 
-    void MouseMovement()
+    public void FaceMouse(Vector3 mouse)
     {
-        Vector3 mouse = Input.mousePosition;
-
-        Vector3 mousePoint = mainCamera.ScreenToWorldPoint(mouse);
-        mousePoint.z = -2f;
-        crosshair.position = mousePoint;
 
         Vector3 playerPosition = mainCamera.WorldToScreenPoint(transform.localPosition);
         playerPosition.z = -0.1f;
-        
 
         Vector2 offset = new Vector2(playerPosition.x - mouse.x, playerPosition.y - mouse.y);
 

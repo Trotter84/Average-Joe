@@ -6,18 +6,21 @@ using UnityEngine;
 public class UiManager : MonoBehaviour
 {
     [Header("Script Components")]
-    [SerializeField] private GameManager gameManager;
+    GameManager gameManager;
     [SerializeField] private Health playerHealthScript;
     [SerializeField] private Weapon weaponScript;
 
     [Header("TextMesh Components")]
     [SerializeField] private TextMeshProUGUI gameTimerTxt;
-    [SerializeField] private TextMeshProUGUI playerScoreTxt;
+    [SerializeField] TextMeshProUGUI playerScoreTxt;
     [SerializeField] private TextMeshProUGUI playerHealthTxt;
     [SerializeField] private TextMeshProUGUI playerAmmoTxt;
     [SerializeField] private TextMeshProUGUI reloadingTxt;
+    [SerializeField] private TextMeshProUGUI gameOverTxt;
 
+    [Header("Settings")]
     [SerializeField] private float reloadTimeDelay;
+    private float timer;
 
 
     void Start()
@@ -52,7 +55,13 @@ public class UiManager : MonoBehaviour
             Debug.LogError("Reloading_txt on Canvas is NULL.");
         }
 
-        gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
+        gameOverTxt = GameObject.Find("Game_Over_txt").GetComponent<TextMeshProUGUI>();
+        if (gameOverTxt == null)
+        {
+            Debug.LogError("Game_Over_txt on Canvas is NULL.");
+        }
+
+        gameManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager>();
         if (gameManager == null)
         {
             Debug.LogError("The GameManager Script on Canvas is NULL.");
@@ -64,7 +73,7 @@ public class UiManager : MonoBehaviour
             Debug.LogError("The Player Health Script on Canvas is NULL.");
         }
 
-        weaponScript = GameObject.Find("Gun").GetComponent<Weapon>();
+        weaponScript = GameObject.FindGameObjectWithTag("Gun").GetComponent<Weapon>();
         if (weaponScript == null)
         {
             Debug.LogError("The Weapon Script on Canvas is NULL.");
@@ -75,40 +84,40 @@ public class UiManager : MonoBehaviour
     {
         UpdateGameTimerDisplay();
 
-        UpdatePlayerScoreDisplay();
-
         UpdateHealthDisplay();
 
         UpdateAmmoDisplay();
+
+        timer += Time.deltaTime;
     }
 
-    void UpdateGameTimerDisplay()
+    public void UpdateGameTimerDisplay()
     {
         gameTimerTxt.text = gameManager.gameTimer.ToString("0.00");
     }
 
-    void UpdatePlayerScoreDisplay()
+    public void UpdateScoreDisplay()
     {
-        playerScoreTxt.text = $"Score: {gameManager.playerScore}";
+        playerScoreTxt.text = $"Score: " + gameManager.currentScore.ToString();
     }
 
-    void UpdateHealthDisplay()
+    public void UpdateHealthDisplay()
     {
         playerHealthTxt.text = $"Health: {playerHealthScript.currentHealth}";
     }
 
-    void UpdateAmmoDisplay()
+    public void UpdateAmmoDisplay()
     {
         playerAmmoTxt.text = $"{weaponScript.bulletsLeft} / {weaponScript.magazineSize}";
     }
 
     public IEnumerator ReloadingUIRoutine()
     {
-        reloadTimeDelay = weaponScript.reloadTime / 3;
+        timer = 0;
 
-        Debug.LogWarning(reloadTimeDelay);
+        reloadTimeDelay = weaponScript.reloadTime / 3f;
 
-        while (weaponScript.isReloading)
+        while (weaponScript.isReloading && timer <= weaponScript.reloadTime)
         {
             reloadingTxt.color = Color.white;
             reloadingTxt.text = $"reloading.  ";
@@ -120,5 +129,16 @@ public class UiManager : MonoBehaviour
             reloadingTxt.color = Color.clear;
         }
         UpdateAmmoDisplay();
+    }
+
+    public IEnumerator GameOverRoutine()
+    {
+        while (GameManager.isPlayerDead)
+        {
+            gameOverTxt.color = Color.red;
+            yield return new WaitForSeconds(0.5f);
+            gameOverTxt.color = Color.clear;
+            yield return new WaitForSeconds(0.5f);
+        }
     }
 }

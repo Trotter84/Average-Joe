@@ -1,21 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 
 
 public class SpawnManager : MonoBehaviour
 {
+    [Header("Components")]
+    [SerializeField] private Enemy enemyScript;
+
     [Header("Spawn Manager")]
     [SerializeField] private bool isSpawning;
 
     [Header("Enemy Pool")]
     [SerializeField] private GameObject enemyPrefab;
-    [SerializeField] private int enemyCountToPool = 10;
-    private GameObject enemyContainer;
-    [SerializeField] private List<GameObject> pooledEnemies = new List<GameObject>();
+    [SerializeField] private int enemyCountToPool = 20;
+    public List<GameObject> pooledEnemies = new List<GameObject>();
 
     [Header("Enemy Spawn Details")]
-    [SerializeField] private float enemySpawnDelay = 4f;
+    public float enemySpawnDelay = 5f;
 
     int posNegX;
     int posNegY;
@@ -56,7 +59,7 @@ public class SpawnManager : MonoBehaviour
         return null;
     }
 
-    void SpawnLocation()
+    void SpawnLocation(GameObject enemy)
     {
         int randX = Random.Range(0, 2);
         if (randX == 0)
@@ -77,6 +80,7 @@ public class SpawnManager : MonoBehaviour
         {
             posNegY = 1;
         }
+        enemy.transform.position = new Vector3(16 * posNegX, 9.5f * posNegY, -1);
     }
 
     IEnumerator SpawnEnemyRoutine()
@@ -87,8 +91,7 @@ public class SpawnManager : MonoBehaviour
 
             if (enemy != null)
             {
-                SpawnLocation();
-                enemy.transform.position = new Vector3(16 * posNegX, 9.5f * posNegY, -1);
+                SpawnLocation(enemy);
                 enemy.SetActive(true);
             }
             yield return new WaitForSeconds(enemySpawnDelay);

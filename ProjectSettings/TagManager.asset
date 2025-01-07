@@ -4,8 +4,13 @@
 TagManager:
   serializedVersion: 3
   tags:
-  - Gun
+  - UICanvas
+  - MouseController
   - Enemy
+  - Gun
+  - Bullet
+  - FxTemporaire
+  - Audio
   layers:
   - Default
   - TransparentFX
