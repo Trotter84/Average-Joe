@@ -1,61 +1,90 @@
+using System;
 using UnityEngine;
 
+
 [CreateAssetMenu(fileName = "GunItem", menuName = "Scriptable Objects/GunItem")]
-public class GunItem : ScriptableObject
+public class GunItem : ScriptableObject, ISerializationCallbackReceiver
 {
-    public GameObject prefab;
     public string gunName;
     public int gunID;
     public float gunDamage;
+    public FireRate fireRate;
+    public float fireSpeed;
+    public int bulletsPerShot;
     public int magazineSize;
     public int bulletsLeft;
     public float reloadTime;
     public float bulletSpread;
 
-    [System.Serializable]
-    public class GunInstance
-    {
-        public GunItem gunType;
-        public string gunName;
-        public int gunID;
-        public float gunDamage;
-        public int magazineSize;
-        public int bulletsLeft;
-        public float reloadTime;
-        public float bulletSpread;
 
-        public GunInstance(GunItem gunItem)
-        {
-            {
-                gunItem.gunName = "Pistol";
-                gunItem.gunID = 0;
-                gunItem.gunDamage = 1.5f;
-                gunItem.magazineSize = 9;
-                gunItem.bulletsLeft = gunItem.magazineSize;
-                gunItem.reloadTime = 1.5f;
-                gunItem.bulletSpread = 0.1f;
-            }
-            {
-                gunItem.gunName = "Assault";
-                gunItem.gunID = 1;
-                gunItem.gunDamage = 1.0f;
-                gunItem.magazineSize = 32;
-                gunItem.bulletsLeft = gunItem.magazineSize;
-                gunItem.reloadTime = 2.5f;
-                gunItem.bulletSpread = 0.2f;
-            }
-            {
-                gunItem.gunName = "Shotgun";
-                gunItem.gunID = 2;
-                gunItem.gunDamage = 0.5f;
-                gunItem.magazineSize = 9;
-                gunItem.bulletsLeft = gunItem.magazineSize;
-                gunItem.reloadTime = 3.0f;
-                gunItem.bulletSpread = 0.5f;
-            }
-        }
+
+    void Init()
+    {
 
     }
+
+    public void OnBeforeSerialize()
+    {
+        Init();
+    }
+
+    public void OnAfterDeserialize()
+    {
+
+    }
+
+    public enum FireRate
+    {
+        Auto,
+        Single,
+        Burst
+    }
+
+    // public class GunInstance
+    // {
+        // public GunItem gunType;
+        // public string gunName;
+        // public int gunID;
+        // public float gunDamage;
+        // public int magazineSize;
+        // public int bulletsLeft;
+        // public float reloadTime;
+        // public float bulletSpread;
+
+        // public GunInstance(GunItem gunItem)
+        // {
+        //     {
+        //         gunItem.gunName = "Pistol";
+        //         gunItem.gunID = 0;
+        //         gunItem.gunDamage = 1.5f;
+        //         gunItem.magazineSize = 9;
+        //         gunItem.bulletsLeft = gunItem.magazineSize;
+        //         gunItem.reloadTime = 1.5f;
+        //         gunItem.bulletSpread = 0.1f;
+        //     }
+        //     {
+        //         gunItem.gunName = "Assault";
+        //         gunItem.gunID = 1;
+        //         gunItem.gunDamage = 1.0f;
+        //         gunItem.magazineSize = 32;
+        //         gunItem.bulletsLeft = gunItem.magazineSize;
+        //         gunItem.reloadTime = 2.5f;
+        //         gunItem.bulletSpread = 0.2f;
+        //     }
+        //     {
+        //         gunItem.gunName = "Shotgun";
+        //         gunItem.gunID = 2;
+        //         gunItem.gunDamage = 0.5f;
+        //         gunItem.magazineSize = 9;
+        //         gunItem.bulletsLeft = gunItem.magazineSize;
+        //         gunItem.reloadTime = 3.0f;
+        //         gunItem.bulletSpread = 0.5f;
+        //     }
+        // }
+
+    // }
+
+
 }
 
         // GunItem Pistol = new GunItem();

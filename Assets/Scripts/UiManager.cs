@@ -7,8 +7,10 @@ public class UiManager : MonoBehaviour
 {
     [Header("Script Components")]
     GameManager gameManager;
+    [SerializeField] private PlayerController player;
     [SerializeField] private Health playerHealthScript;
-    [SerializeField] private Weapon weaponScript;
+    [SerializeField] private Weapons weaponScript;
+    [SerializeField] protected GunItem gunItem;
 
     [Header("TextMesh Components")]
     [SerializeField] private TextMeshProUGUI gameTimerTxt;
@@ -73,7 +75,7 @@ public class UiManager : MonoBehaviour
             Debug.LogError("The Player Health Script on Canvas is NULL.");
         }
 
-        weaponScript = GameObject.FindGameObjectWithTag("Gun").GetComponent<Weapon>();
+        weaponScript = GameObject.FindGameObjectWithTag("Gun").GetComponent<Weapons>();
         if (weaponScript == null)
         {
             Debug.LogError("The Weapon Script on Canvas is NULL.");
@@ -108,16 +110,17 @@ public class UiManager : MonoBehaviour
 
     public void UpdateAmmoDisplay()
     {
-        playerAmmoTxt.text = $"{weaponScript.bulletsLeft} / {weaponScript.magazineSize}";
+        // Debug.Log(gunItem.bulletsLeft + " / " + gunItem.magazineSize);
+        playerAmmoTxt.text = $"{player.currentBulletsLeft} / {player.currentMagazine}";
     }
 
     public IEnumerator ReloadingUIRoutine()
     {
         timer = 0;
 
-        reloadTimeDelay = weaponScript.reloadTime / 3f;
+        reloadTimeDelay = gunItem.reloadTime / 3f;
 
-        while (weaponScript.isReloading && timer <= weaponScript.reloadTime)
+        while (weaponScript.isReloading && timer <= gunItem.reloadTime)
         {
             reloadingTxt.color = Color.white;
             reloadingTxt.text = $"reloading.  ";

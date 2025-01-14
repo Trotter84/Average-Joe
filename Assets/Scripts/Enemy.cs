@@ -12,7 +12,6 @@ public class Enemy : MonoBehaviour
 
     [Header("Attributes")]
     [SerializeField] [Range(0.1f, 5.0f)] private float speed = 2.0f;
-    [SerializeField] [Range(0.1f, 5.0f)] private float turnSpeed = 4.0f;
     [SerializeField] [Range(1, 10)] private int damage = 1;
 
     private float collisionTimer = 0;

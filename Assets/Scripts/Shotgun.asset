@@ -10,15 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bdcb6555be02d4f018cbc4542b5c7b8d, type: 3}
-  m_Name: GunItem
+  m_Name: Shotgun
   m_EditorClassIdentifier: 
-  gunName: 
-  gunID: 0
-  gunDamage: 0
+  prefab: {fileID: 0}
+  gunName: Shotgun
+  gunID: 2
+  gunDamage: 0.5
   fireRate: 1
-  fireSpeed: 0
-  bulletsPerShot: 0
-  magazineSize: 0
+  fireSpeed: 1.5
+  bulletsPerShot: 5
+  magazineSize: 5
   bulletsLeft: 0
-  reloadTime: 0
-  bulletSpread: 0
+  reloadTime: 3.5
+  bulletSpread: 0.5
+  muzzleFlash: {fileID: 0}
+  gunSound: {fileID: 0}

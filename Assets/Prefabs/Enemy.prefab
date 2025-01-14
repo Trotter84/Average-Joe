@@ -50,7 +50,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7937e0b8707a4568ba06a341a914b80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
+  waypoint: {fileID: 0}
   speed: 1.5
   damage: 1
 --- !u!114 &3489997246616792820
@@ -67,35 +67,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameManager: {fileID: 0}
   uiManager: {fileID: 0}
-  startingHealth: 5
+  startingHealth: 3
   currentHealth: 0
-  enemyDeath:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 3489997246616792820}
-        m_TargetAssemblyTypeName: Health, Assembly-CSharp
-        m_MethodName: TestMethod
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 11500000, guid: ff71ad05dcc61477a88de7dc8b9d9043, type: 3}
-        m_TargetAssemblyTypeName: Health, Assembly-CSharp
-        m_MethodName: 
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!136 &7186329423295819903
 CapsuleCollider:
   m_ObjectHideFlags: 0

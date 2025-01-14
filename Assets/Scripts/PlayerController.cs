@@ -11,13 +11,18 @@ public class PlayerController : MonoBehaviour
     private Rigidbody rb;
     [SerializeField] private Camera mainCamera;
     [SerializeField] private MouseController mouseController;
-    [SerializeField] private Weapon weaponScript;
+    [SerializeField] protected GunItem gunItem;
+    [SerializeField] private Weapons weaponScript;
 
     [Header("Attributes")]
     [SerializeField] private float speed = 5.0f;
     private Vector2 moveDiagonal;
     public List<GameObject> inventory = new List<GameObject>();
     private int weaponChoice = 0;
+    public UnityEvent weaponSwap;
+
+    public int currentMagazine;
+    public int currentBulletsLeft;
 
     private float timer;
 
@@ -27,6 +32,9 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
 
         mainCamera = Camera.main;
+
+        currentMagazine = gunItem.magazineSize;
+        currentBulletsLeft = gunItem.bulletsLeft;
 
         InventoryController();
     }
@@ -58,7 +66,7 @@ public class PlayerController : MonoBehaviour
             {
                 weaponScript.Reload();
 
-                timer = weaponScript.reloadTime;
+                timer = gunItem.reloadTime;
             }
         }
 
@@ -66,18 +74,21 @@ public class PlayerController : MonoBehaviour
         {
             weaponChoice = 0;
             InventoryController();
+            // weaponScript.pistolMagazine = weaponScript.bulletsLeft;
         }
         
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             weaponChoice = 1;
             InventoryController();
+            // weaponScript.assaultMagazine = weaponScript.bulletsLeft;
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             weaponChoice = 2;
             InventoryController();
+            // weaponScript.shotgunMagazine = weaponScript.bulletsLeft;
         }
     }
 
@@ -87,17 +98,23 @@ public class PlayerController : MonoBehaviour
         {
             weapon.SetActive(false);
         }
-        
+    
         inventory[weaponChoice].SetActive(true);
 
-        weaponScript = GameObject.FindGameObjectWithTag("Gun").GetComponent<Weapon>();
+        weaponScript = GameObject.FindGameObjectWithTag("Gun").GetComponent<Weapons>();
         if (weaponScript == null)
         {
             Debug.LogError("Weapon : Weapon on Player is NULL.");
         }
+        
         mouseController.ChangeGun();
-        weaponScript.ChangeAudioSource();
+        // weaponScript.ChangeAudioSource();
 
+        currentMagazine = gunItem.magazineSize;
+        currentBulletsLeft = gunItem.bulletsLeft;
+
+        weaponSwap.Invoke();
+        Debug.LogWarning(currentBulletsLeft + " / " + currentMagazine);
     }
 
     void PlayerMovement()

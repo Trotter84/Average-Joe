@@ -131,7 +131,7 @@ GameObject:
   - component: {fileID: 4854207645771683297}
   m_Layer: 0
   m_Name: Shotgun_audio
-  m_TagString: Untagged
+  m_TagString: Audio
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -257,7 +257,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6764231872280997293}
-  - component: {fileID: 4109528467851611407}
+  - component: {fileID: 1730116889845880939}
   m_Layer: 0
   m_Name: Gun (shotgun)
   m_TagString: Gun
@@ -282,7 +282,7 @@ Transform:
   - {fileID: 2515372643546361579}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4109528467851611407
+--- !u!114 &1730116889845880939
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -291,28 +291,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 8308577475107108929}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55d39f42fbf6c4ff3a36c0d498d477bc, type: 3}
+  m_Script: {fileID: 11500000, guid: 6e89d43408d41414a8edb2341de8d19c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   bulletSpawnPoint: {fileID: 2515372643546361579}
-  bulletScript: {fileID: 5320587964549207026, guid: 0bab09c4ef5cc4f1096e56613355bb0e, type: 3}
   bulletPrefab: {fileID: 3260173783947735602, guid: 0bab09c4ef5cc4f1096e56613355bb0e, type: 3}
   pooledBullets: []
-  bulletsPerFire: 5
   player: {fileID: 0}
+  mouse: {fileID: 0}
   crosshair: {fileID: 0}
   uiManager: {fileID: 0}
-  gunID: 2
-  choice: 0
-  canShoot: 0
-  bulletDamage: 0.5
-  magazineSize: 5
-  muzzleFlash: {fileID: 6097989941097917118}
+  gunItem: {fileID: 11400000, guid: 4c01633649a8d4ba9998a60ad1eaf994, type: 2}
   gunSound: {fileID: 4854207645771683297}
-  bulletsLeft: 0
+  muzzleFlash: {fileID: 6097989941097917118}
   isReloading: 0
-  reloadTime: 3.5
-  spread: 0.5
 --- !u!1001 &6099167377580347722
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -331,15 +323,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4438486546012146, guid: 9bf79f2d846a57440a981c168c87c617, type: 3}
       propertyPath: m_LocalScale.x
-      value: 25
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 4438486546012146, guid: 9bf79f2d846a57440a981c168c87c617, type: 3}
       propertyPath: m_LocalScale.y
-      value: 25
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 4438486546012146, guid: 9bf79f2d846a57440a981c168c87c617, type: 3}
       propertyPath: m_LocalScale.z
-      value: 25
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 4438486546012146, guid: 9bf79f2d846a57440a981c168c87c617, type: 3}
       propertyPath: m_LocalPosition.x

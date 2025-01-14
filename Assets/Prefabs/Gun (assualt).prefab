@@ -95,7 +95,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5642056756497599369}
-  - component: {fileID: 3990542433055030735}
+  - component: {fileID: 756434212008021095}
   m_Layer: 0
   m_Name: Gun (assualt)
   m_TagString: Gun
@@ -120,7 +120,7 @@ Transform:
   - {fileID: 1321053051177723164}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3990542433055030735
+--- !u!114 &756434212008021095
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -129,28 +129,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 1490916132160662869}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55d39f42fbf6c4ff3a36c0d498d477bc, type: 3}
+  m_Script: {fileID: 11500000, guid: a9822c9b178724c238397b9ff97ba1a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   bulletSpawnPoint: {fileID: 1321053051177723164}
-  bulletScript: {fileID: 5320587964549207026, guid: 0bab09c4ef5cc4f1096e56613355bb0e, type: 3}
   bulletPrefab: {fileID: 3260173783947735602, guid: 0bab09c4ef5cc4f1096e56613355bb0e, type: 3}
   pooledBullets: []
   player: {fileID: 0}
+  mouse: {fileID: 0}
   crosshair: {fileID: 0}
   uiManager: {fileID: 0}
-  gunID: 1
-  choice: 0
-  canShoot: 0
-  bulletDamage: 1
-  bulletsPerFire: 1
-  magazineSize: 32
-  muzzleFlash: {fileID: 3608655095875978641}
-  gunSound: {fileID: 1159708734504105411}
-  bulletsLeft: 0
+  gunItem: {fileID: 11400000, guid: 9f7f08846f2b94a8cac52f261369a1ea, type: 2}
   isReloading: 0
-  reloadTime: 2.5
-  spread: 0.1
 --- !u!1 &6364104165531171518
 GameObject:
   m_ObjectHideFlags: 0
@@ -390,11 +380,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9bf79f2d846a57440a981c168c87c617, type: 3}
---- !u!1 &3608655095875978641 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1391847458487284, guid: 9bf79f2d846a57440a981c168c87c617, type: 3}
-  m_PrefabInstance: {fileID: 3607512288246857317}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3611800690992949655 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4438486546012146, guid: 9bf79f2d846a57440a981c168c87c617, type: 3}

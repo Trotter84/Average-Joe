@@ -1,8 +1,20 @@
 using UnityEngine;
 
-public class Pistol : MonoBehaviour
+public class Pistol : Weapons
 {
-    public int gunID = 0;
-    public float bulletDamage = 1.5f;
+    public override void Shoot()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    new void Start()
+    {
+        base.Start();
+    }
+
+    new void Update()
+    {
+        base.Update();
+    }
     
 }

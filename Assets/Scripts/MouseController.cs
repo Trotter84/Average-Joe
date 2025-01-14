@@ -7,7 +7,9 @@ public class MouseController : MonoBehaviour
     [Header("Components")]
     [SerializeField] private Camera mainCamera;
     [SerializeField] private PlayerController player;
-    [SerializeField] public Weapon weapon;
+    [SerializeField] public Weapons weapon;
+
+    public bool isShooting = false;
 
 
     void Awake()
@@ -32,13 +34,20 @@ public class MouseController : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            weapon.Fire();
+            isShooting = true;
+            weapon.muzzleFlash.SetBool("isShooting", isShooting);
+        }
+
+        if (Input.GetMouseButtonUp(0))
+        {
+            isShooting = false;
+            weapon.muzzleFlash.SetBool("isShooting", isShooting);
         }
     }
 
     public void ChangeGun()
     {
-        weapon = GameObject.FindGameObjectWithTag("Gun").GetComponent<Weapon>();
+        weapon = GameObject.FindGameObjectWithTag("Gun").GetComponent<Weapons>();
         if (weapon == null)
         {
             Debug.LogError("The Weapon : Weapon on Crosshair : MouseController is NULL.");
