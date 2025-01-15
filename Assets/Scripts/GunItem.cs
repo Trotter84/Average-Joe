@@ -12,10 +12,8 @@ public class GunItem : ScriptableObject, ISerializationCallbackReceiver
     public float fireSpeed;
     public int bulletsPerShot;
     public int magazineSize;
-    public int bulletsLeft;
     public float reloadTime;
     public float bulletSpread;
-
 
 
     void Init()

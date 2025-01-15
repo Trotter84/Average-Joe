@@ -18,7 +18,7 @@ public class SpawnManager : MonoBehaviour
     public List<GameObject> pooledEnemies = new List<GameObject>();
 
     [Header("Enemy Spawn Details")]
-    public float enemySpawnDelay = 5f;
+    public float enemySpawnDelay = 4f;
 
     int posNegX;
     int posNegY;

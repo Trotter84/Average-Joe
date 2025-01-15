@@ -10,6 +10,14 @@ public class Assault : Weapons
     new void Start()
     {
         base.Start();
+
+        gunDamage = gunItem.gunDamage;
+        fireSpeed = gunItem.fireSpeed;
+        bulletsPerShot = gunItem.bulletsPerShot;
+        magazineSize = gunItem.magazineSize;
+        bulletsLeft = magazineSize;
+        reloadTime = gunItem.reloadTime;
+        bulletSpread = gunItem.bulletsPerShot;
     }
 
     new void Update()

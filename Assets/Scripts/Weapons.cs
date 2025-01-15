@@ -16,6 +16,17 @@ public abstract class Weapons : MonoBehaviour
     [SerializeField] private UiManager uiManager;
     [SerializeField] protected GunItem gunItem;
 
+    [Header("Gun Attributes")]
+    public string gunName;
+    public int gunID;
+    public float gunDamage;
+    public float fireSpeed;
+    public int bulletsPerShot;
+    public int magazineSize;
+    public int bulletsLeft;
+    public float reloadTime;
+    public float bulletSpread;
+
     private float timeToFire = 0.0f;
     private float gunRange = 30f;
     private float bulletDuration = 0.05f;
@@ -23,11 +34,6 @@ public abstract class Weapons : MonoBehaviour
     public Animator muzzleFlash;
     public MeshRenderer muzzleFlashRender;
     private float muzzleFashDuration = 0.05f;
-    private bool canShoot;
-    public bool isReloading;
-
-    [Header("Unity Events")]
-    [SerializeField] private UnityEvent fireGun;
     
 
     public void Start()
@@ -57,9 +63,6 @@ public abstract class Weapons : MonoBehaviour
         {
             Debug.LogError("The Canvas : UiManager on Weapon is NULL.");
         }
-
-        gunItem.bulletsLeft = gunItem.magazineSize;
-        canShoot = true;
     }
 
     private void InitiatePool()
@@ -89,96 +92,101 @@ public abstract class Weapons : MonoBehaviour
     {
         if (Time.time >= timeToFire)
         {
-            
             timeToFire = Time.time + (1.0f / gunItem.fireSpeed);
             return true;
         }
         return false;
     }
 
+    bool CanShoot()
+    {
+        if (bulletsLeft > 0 && !player.isReloading)
+        {
+            return true;
+        }
+        muzzleFlashRender.enabled = false;
+        return false;
+    }
+
     public void Update()
     {
-        if (mouse.isShooting)
+        if (CanShoot())
         {
-            if (gunItem.fireRate == GunItem.FireRate.Auto)
+            if (mouse.isShooting)
             {
-                if (CheckFireRate())
+                if (gunItem.fireRate == GunItem.FireRate.Auto)
+                {
+                    if (CheckFireRate())
+                    {
+                        Fire();
+                        muzzleFlashRender.enabled = true;
+                    }
+                }
+                else if (gunItem.fireRate == GunItem.FireRate.Single)
                 {
                     Fire();
-                    muzzleFlashRender.enabled = true;
+                    mouse.isShooting = false;
                 }
             }
-            else if (gunItem.fireRate == GunItem.FireRate.Single)
-            {
-                Fire();
-                mouse.isShooting = false;
-            }
-        
         }
+        reloadTime = gunItem.reloadTime;
     }
 
     public void Fire()
     {
-        if (canShoot)
+        for (int i = 0; i < gunItem.bulletsPerShot; i++)
         {
-            for (int i = 0; i < gunItem.bulletsPerShot; i++)
+            bulletPrefab = GetPooledBullets();
+
+            if (bulletPrefab != null)
             {
-                bulletPrefab = GetPooledBullets();
+                gunSound.Play();
 
-                if (bulletPrefab != null)
+                var currentBullet = bulletPrefab.GetComponent<LineRenderer>();
+
+                Vector3 rayOrigin = bulletSpawnPoint.position;
+                Vector3 crosshairTarget = crosshair.position;
+                
+                currentBullet.SetPosition(0, rayOrigin);
+
+                Vector3 offset = new Vector3(rayOrigin.x - crosshairTarget.x, rayOrigin.y - crosshairTarget.y);
+
+                float x = Random.Range(-gunItem.bulletSpread, gunItem.bulletSpread);
+                float y = Random.Range(-gunItem.bulletSpread, gunItem.bulletSpread);
+
+                Vector3 offsetWithSpread = offset + new Vector3(x, y);
+
+                float angle = Mathf.Atan2(offsetWithSpread.y, offsetWithSpread.x) * Mathf.Rad2Deg;
+                
+                transform.eulerAngles = new Vector3(angle, -90f, 90f);
+
+                RaycastHit hit;
+                if (Physics.Raycast(rayOrigin, bulletSpawnPoint.transform.forward - offsetWithSpread, out hit, gunRange))
                 {
-                    Debug.Log(Time.time + (1.0f / gunItem.fireSpeed));
-                    gunSound.Play();
+                    currentBullet.SetPosition(1, hit.point);
 
-                    var currentBullet = bulletPrefab.GetComponent<LineRenderer>();
+                    var hitEnemy = hit.transform.gameObject;
 
-                    Vector3 rayOrigin = bulletSpawnPoint.position;
-                    Vector3 crosshairTarget = crosshair.position;
-                    
-                    currentBullet.SetPosition(0, rayOrigin);
+                    var health = hitEnemy.GetComponent<Health>();
 
-                    Vector3 offset = new Vector3(rayOrigin.x - crosshairTarget.x, rayOrigin.y - crosshairTarget.y);
-
-                    float x = Random.Range(-gunItem.bulletSpread, gunItem.bulletSpread);
-                    float y = Random.Range(-gunItem.bulletSpread, gunItem.bulletSpread);
-
-                    Vector3 offsetWithSpread = offset + new Vector3(x, y);
-
-                    float angle = Mathf.Atan2(offsetWithSpread.y, offsetWithSpread.x) * Mathf.Rad2Deg;
-                    
-                    transform.eulerAngles = new Vector3(angle, -90f, 90f);
-
-                    RaycastHit hit;
-                    if (Physics.Raycast(rayOrigin, bulletSpawnPoint.transform.forward - offsetWithSpread, out hit, gunRange))
-                    {
-                        currentBullet.SetPosition(1, hit.point);
-
-                        var hitEnemy = hit.transform.gameObject;
-
-                        var health = hitEnemy.GetComponent<Health>();
-                        if (health != null)
-                        {
-                            health.TakeDamage(gunItem.gunDamage);
-                        }
-                    }
-                    else
-                    {
-                        currentBullet.SetPosition(1, rayOrigin + ((bulletSpawnPoint.transform.forward - offsetWithSpread) * gunRange));
-                    }
-                    StartCoroutine(ShootBulletRoutine(bulletPrefab));
-                    StartCoroutine(MuzzleFlashRoutine());
+                    health?.TakeDamage(gunItem.gunDamage);
                 }
+                else
+                {
+                    currentBullet.SetPosition(1, rayOrigin + ((bulletSpawnPoint.transform.forward - offsetWithSpread) * gunRange));
+                }
+                StartCoroutine(ShootBulletRoutine(bulletPrefab));
+                StartCoroutine(MuzzleFlashRoutine());
             }
-            gunItem.bulletsLeft --;
         }
+        bulletsLeft --;
     }
 
     public void Reload()
     {
-        if (gunItem.bulletsLeft != gunItem.magazineSize)
+        if (bulletsLeft != gunItem.magazineSize)
         {
-            isReloading = true;
-            canShoot = false;
+            player.isReloading = true;
             StartCoroutine(ReloadRoutine());
             StartCoroutine(uiManager.ReloadingUIRoutine());
         }
@@ -206,9 +214,8 @@ public abstract class Weapons : MonoBehaviour
     IEnumerator ReloadRoutine()
     {
         yield return new WaitForSeconds(gunItem.reloadTime);
-        gunItem.bulletsLeft = gunItem.magazineSize;
-        canShoot = true;
-        isReloading = false;
+        bulletsLeft = gunItem.magazineSize;
+        player.isReloading = false;
     }
 
 }

@@ -18,11 +18,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float speed = 5.0f;
     private Vector2 moveDiagonal;
     public List<GameObject> inventory = new List<GameObject>();
-    private int weaponChoice = 0;
+    [SerializeField] private int weaponChoice = 0;
+    [SerializeField] private int currentWeapon = 1;
     public UnityEvent weaponSwap;
 
     public int currentMagazine;
     public int currentBulletsLeft;
+    public float currentReloadTime;
+    public bool isReloading;
 
     private float timer;
 
@@ -33,9 +36,6 @@ public class PlayerController : MonoBehaviour
 
         mainCamera = Camera.main;
 
-        currentMagazine = gunItem.magazineSize;
-        currentBulletsLeft = gunItem.bulletsLeft;
-
         InventoryController();
     }
 
@@ -44,6 +44,10 @@ public class PlayerController : MonoBehaviour
         ScreenRestraints();
 
         Inputs();
+
+        currentMagazine = weaponScript.magazineSize;
+        currentBulletsLeft = weaponScript.bulletsLeft;
+        currentReloadTime = weaponScript.reloadTime;
 
         timer -= Time.deltaTime;
     }
@@ -65,8 +69,7 @@ public class PlayerController : MonoBehaviour
             if (0 > timer)
             {
                 weaponScript.Reload();
-
-                timer = gunItem.reloadTime;
+                timer = currentReloadTime;
             }
         }
 
@@ -74,47 +77,55 @@ public class PlayerController : MonoBehaviour
         {
             weaponChoice = 0;
             InventoryController();
-            // weaponScript.pistolMagazine = weaponScript.bulletsLeft;
         }
         
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             weaponChoice = 1;
             InventoryController();
-            // weaponScript.assaultMagazine = weaponScript.bulletsLeft;
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             weaponChoice = 2;
             InventoryController();
-            // weaponScript.shotgunMagazine = weaponScript.bulletsLeft;
         }
     }
 
     void InventoryController()
     {
-        foreach (var weapon in inventory)
+        if (currentWeapon != weaponChoice)
         {
-            weapon.SetActive(false);
-        }
-    
-        inventory[weaponChoice].SetActive(true);
-
-        weaponScript = GameObject.FindGameObjectWithTag("Gun").GetComponent<Weapons>();
-        if (weaponScript == null)
-        {
-            Debug.LogError("Weapon : Weapon on Player is NULL.");
-        }
+            foreach (var weapon in inventory)
+            {
+                weapon.SetActive(false);
+            }
         
-        mouseController.ChangeGun();
-        // weaponScript.ChangeAudioSource();
+            inventory[weaponChoice].SetActive(true);
 
-        currentMagazine = gunItem.magazineSize;
-        currentBulletsLeft = gunItem.bulletsLeft;
+            weaponScript = GameObject.FindGameObjectWithTag("Gun").GetComponent<Weapons>();
+            if (weaponScript == null)
+            {
+                Debug.LogError("Weapon : Weapon on Player is NULL.");
+            }
+            
+            mouseController.ChangeGun();
 
-        weaponSwap.Invoke();
-        Debug.LogWarning(currentBulletsLeft + " / " + currentMagazine);
+            weaponSwap.Invoke();
+
+            // Debug.Log(weaponScript.gunName);
+            // Debug.Log(weaponScript.gunID);
+            // Debug.Log(weaponScript.gunDamage);
+            // Debug.Log(weaponScript.fireSpeed);
+            // Debug.Log(weaponScript.bulletsPerShot);
+            // Debug.Log(weaponScript.magazineSize);
+            // Debug.Log(weaponScript.bulletsLeft);
+            Debug.Log(weaponScript.reloadTime);
+            Debug.Log(weaponScript.bulletSpread);
+
+
+            currentWeapon = weaponChoice;
+        }
     }
 
     void PlayerMovement()

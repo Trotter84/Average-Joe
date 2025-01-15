@@ -67,7 +67,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameManager: {fileID: 0}
   uiManager: {fileID: 0}
-  startingHealth: 3
+  startingHealth: 4
   currentHealth: 0
 --- !u!136 &7186329423295819903
 CapsuleCollider:

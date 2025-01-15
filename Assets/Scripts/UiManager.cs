@@ -110,7 +110,6 @@ public class UiManager : MonoBehaviour
 
     public void UpdateAmmoDisplay()
     {
-        // Debug.Log(gunItem.bulletsLeft + " / " + gunItem.magazineSize);
         playerAmmoTxt.text = $"{player.currentBulletsLeft} / {player.currentMagazine}";
     }
 
@@ -118,10 +117,15 @@ public class UiManager : MonoBehaviour
     {
         timer = 0;
 
-        reloadTimeDelay = gunItem.reloadTime / 3f;
+        reloadTimeDelay = player.currentReloadTime / 3f;
 
-        while (weaponScript.isReloading && timer <= gunItem.reloadTime)
+        // Debug.LogWarning(timer);
+        Debug.LogError(player.currentReloadTime);
+        // Debug.LogError(reloadTimeDelay);
+
+        while (player.isReloading && timer <= player.currentReloadTime)
         {
+            Debug.LogWarning("Hello");
             reloadingTxt.color = Color.white;
             reloadingTxt.text = $"reloading.  ";
             yield return new WaitForSeconds(reloadTimeDelay);

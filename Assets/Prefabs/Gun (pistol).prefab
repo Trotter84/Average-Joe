@@ -54,7 +54,18 @@ MonoBehaviour:
   crosshair: {fileID: 0}
   uiManager: {fileID: 0}
   gunItem: {fileID: 11400000, guid: 1b92330c9b9294979b0382ebbf41de7c, type: 2}
-  isReloading: 0
+  gunName: Pistol
+  gunID: 0
+  gunDamage: 0
+  fireSpeed: 0
+  bulletsPerShot: 0
+  magazineSize: 0
+  bulletsLeft: 0
+  reloadTime: 0
+  bulletSpread: 0
+  gunSound: {fileID: 558056555924142067}
+  muzzleFlash: {fileID: 9082293088242061946}
+  muzzleFlashRender: {fileID: 9153969986436874092}
 --- !u!1 &3331715046375800722
 GameObject:
   m_ObjectHideFlags: 0
@@ -317,7 +328,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1391847458487284, guid: 9bf79f2d846a57440a981c168c87c617, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4438486546012146, guid: 9bf79f2d846a57440a981c168c87c617, type: 3}
       propertyPath: m_LocalScale.x
@@ -375,11 +386,25 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 23009539048712306, guid: 9bf79f2d846a57440a981c168c87c617, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9bf79f2d846a57440a981c168c87c617, type: 3}
+--- !u!95 &9082293088242061946 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 95166372207576420, guid: 9bf79f2d846a57440a981c168c87c617, type: 3}
+  m_PrefabInstance: {fileID: 9176313206134118174}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &9153969986436874092 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 23009539048712306, guid: 9bf79f2d846a57440a981c168c87c617, type: 3}
+  m_PrefabInstance: {fileID: 9176313206134118174}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &9175825827797123308 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4438486546012146, guid: 9bf79f2d846a57440a981c168c87c617, type: 3}
