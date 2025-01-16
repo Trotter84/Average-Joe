@@ -119,13 +119,8 @@ public class UiManager : MonoBehaviour
 
         reloadTimeDelay = player.currentReloadTime / 3f;
 
-        // Debug.LogWarning(timer);
-        Debug.LogError(player.currentReloadTime);
-        // Debug.LogError(reloadTimeDelay);
-
         while (player.isReloading && timer <= player.currentReloadTime)
         {
-            Debug.LogWarning("Hello");
             reloadingTxt.color = Color.white;
             reloadingTxt.text = $"reloading.  ";
             yield return new WaitForSeconds(reloadTimeDelay);

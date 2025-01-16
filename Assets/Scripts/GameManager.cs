@@ -1,7 +1,5 @@
 using System;
 using System.Collections;
-using TMPro;
-using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -9,6 +7,7 @@ using UnityEngine.Events;
 public class GameManager : MonoBehaviour
 {
     [Header("Components")]
+    public static GameManager gameManager;
     [SerializeField] private UiManager uiManager;
     [SerializeField] private SpawnManager spawnManager;
 

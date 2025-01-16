@@ -29,7 +29,7 @@ public class Health : MonoBehaviour
         uiManager = GameObject.Find("Canvas").GetComponent<UiManager>();
         if (uiManager == null)
         {
-            Debug.LogError("Canvas:UiManager on Health is NULL.");
+            Debug.LogError("Canvas : UiManager on Health is NULL.");
         }
     }
 

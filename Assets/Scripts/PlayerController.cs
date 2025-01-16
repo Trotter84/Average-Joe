@@ -113,17 +113,6 @@ public class PlayerController : MonoBehaviour
 
             weaponSwap.Invoke();
 
-            // Debug.Log(weaponScript.gunName);
-            // Debug.Log(weaponScript.gunID);
-            // Debug.Log(weaponScript.gunDamage);
-            // Debug.Log(weaponScript.fireSpeed);
-            // Debug.Log(weaponScript.bulletsPerShot);
-            // Debug.Log(weaponScript.magazineSize);
-            // Debug.Log(weaponScript.bulletsLeft);
-            Debug.Log(weaponScript.reloadTime);
-            Debug.Log(weaponScript.bulletSpread);
-
-
             currentWeapon = weaponChoice;
         }
     }
